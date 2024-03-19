@@ -40,7 +40,7 @@ if ($result_check_like->num_rows == 0) { // L'utente non ha ancora messo like pe
             $row = $result->fetch_assoc();
             $likes = $row['likes'];
             // Restituisci il nuovo numero di likes come JSON
-            echo json_encode(array("likes" => $likes, "id_palette" => $id_palette, "id_utente" => $id_utente));
+            echo json_encode(array("likes" => $likes, "id_palette" => $id_palette, "id_utente" => $id_utente, "isLiked" => true));
         } else {
             echo "Errore nell'ottenere i likes aggiornati.";
         }
@@ -48,9 +48,24 @@ if ($result_check_like->num_rows == 0) { // L'utente non ha ancora messo like pe
         echo "Errore nell'aggiornamento dei likes: " . $connessione->error;
     }
 } else {
-    /* TODO */
-    // L'utente ha già messo like per questa palette, restituisci un messaggio di errore
-    echo "L'utente ha già messo like per questa palette.";
+    /* Ha già messo like */
+    $sqlInverso = "UPDATE palettes SET likes = likes - 1 WHERE id_palette = '$id_palette'";
+    $sqlInverso1 = "DELETE FROM likes WHERE id_utente = '$id_utente' AND id_palette = '$id_palette'";
+
+    if ($connessione->query($sqlInverso) === TRUE && $connessione->query($sqlInverso1) === TRUE) {
+        // Se l'aggiornamento è avvenuto con successo, ottieni il nuovo numero di likes
+        $result = $connessione->query("SELECT likes FROM palettes WHERE id_palette = '$id_palette'");
+        if ($result) {
+            $row = $result->fetch_assoc();
+            $likes = $row['likes'];
+            // Restituisci il nuovo numero di likes come JSON
+            echo json_encode(array("likes" => $likes, "id_palette" => $id_palette, "id_utente" => $id_utente, "isLiked" => false));
+        } else {
+            echo "Errore nell'ottenere i likes aggiornati.";
+        }
+    } else {
+        echo "Errore nell'aggiornamento dei likes: " . $connessione->error;
+    }
 }
 
 // Chiudi la connessione

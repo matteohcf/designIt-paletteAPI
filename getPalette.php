@@ -13,7 +13,7 @@ if ($connessione->connect_error) {
     echo "Errore di connessione: " . $connessione->connect_error;
 } else {
     // Query per ottenere i dati della palette (esempio)
-$sql = "SELECT id_palette, color1, color2, color3, color4, likes, creating_user_id FROM palettes";
+$sql = "SELECT id_palette, color1, color2, color3, color4, likes, creating_user_id FROM palettes ORDER BY likes DESC";
 $result = $connessione->query($sql);
 
 if ($result->num_rows > 0) {

@@ -17,7 +17,7 @@ if ($connessione->connect_error) {
     $creating_user_id = $data["creating_user_id"];
 
     // Query per ottenere i dati della palette (esempio)
-    $sql = "SELECT id_palette, color1, color2, color3, color4, likes, creating_user_id FROM palettes WHERE creating_user_id = '$creating_user_id'";
+    $sql = "SELECT id_palette, color1, color2, color3, color4, likes, creating_user_id FROM palettes WHERE creating_user_id = '$creating_user_id' ORDER BY likes DESC";
     $result = $connessione->query($sql);
 
 if ($result->num_rows > 0) {

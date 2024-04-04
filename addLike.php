@@ -2,7 +2,7 @@
 
 /* Abilita cors se è una riciesta option + https response code */
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("Access-Control-Allow-Origin: https://palette.matteocarrara.it");
+    header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Headers: *");
     header("Access-Control-Allow-Methods: *");
     http_response_code(200);
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 include_once("config.php");
 
 // Abilita CORS
-header("Access-Control-Allow-Origin: https://palette.matteocarrara.it");
+header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 

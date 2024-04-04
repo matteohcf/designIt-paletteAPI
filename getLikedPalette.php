@@ -3,7 +3,7 @@
 include_once("config.php");
 
 // Abilita CORS
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: https://palette.matteocarrara.it");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 

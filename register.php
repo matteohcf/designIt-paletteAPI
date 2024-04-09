@@ -25,43 +25,51 @@ if ($connessione->connect_error) {
             "message" => "Username, email e password sono obbligatori"
         );
     } else {
-        // Verifica se l'utente esiste già nel database
-        $checkQuery = "SELECT * FROM utenti WHERE username = '$username' OR email = '$email'";
-        $checkResult = $connessione->query($checkQuery);
-
-        if ($checkResult->num_rows > 0) {
-            // L'utente esiste già, restituisci un messaggio di errore
+        // Verifica se l'indirizzo email è valido
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $response = array(
                 "status" => "error",
-                "message" => "L'utente esiste già"
+                "message" => "L'indirizzo email non è valido"
             );
         } else {
-            // Hash della password
-            $hashedPassword = md5($password);
+            // Verifica se l'utente esiste già nel database
+            $checkQuery = "SELECT * FROM utenti WHERE username = '$username' OR email = '$email'";
+            $checkResult = $connessione->query($checkQuery);
 
-            // Inserisci l'utente nel database
-            $insertQuery = "INSERT INTO utenti (email, username, password) VALUES ('$email', '$username', '$hashedPassword')";
-            if ($connessione->query($insertQuery) === TRUE) {
-                // Successo, restituisci un messaggio di successo
-                $response = array(
-                    "status" => "success",
-                    "message" => "Utente registrato con successo"
-                );
-            } else {
-                // Errore durante l'inserimento dell'utente nel database
+            if ($checkResult->num_rows > 0) {
+                // L'utente esiste già, restituisci un messaggio di errore
                 $response = array(
                     "status" => "error",
-                    "message" => "Errore durante la registrazione dell'utente"
+                    "message" => "L'utente esiste già"
                 );
+            } else {
+                // Hash della password
+                $hashedPassword = md5($password);
+
+                // Inserisci l'utente nel database
+                $insertQuery = "INSERT INTO utenti (email, username, password) VALUES ('$email', '$username', '$hashedPassword')";
+                if ($connessione->query($insertQuery) === TRUE) {
+                    // Successo, restituisci un messaggio di successo
+                    $response = array(
+                        "status" => "success",
+                        "message" => "Utente registrato con successo"
+                    );
+                } else {
+                    // Errore durante l'inserimento dell'utente nel database
+                    $response = array(
+                        "status" => "error",
+                        "message" => "Errore durante la registrazione dell'utente"
+                    );
+                }
             }
         }
-}
+    }
 
-// Restituisci la risposta al frontend come JSON
-header('Content-Type: application/json');
-echo json_encode($response);
+    // Restituisci la risposta al frontend come JSON
+    header('Content-Type: application/json');
+    echo json_encode($response);
 
-// Chiudi la connessione al database
-$connessione->close();
+    // Chiudi la connessione al database
+    $connessione->close();
 }
 ?>

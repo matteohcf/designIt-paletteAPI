@@ -17,7 +17,9 @@ if ($connessione->connect_error) {
     $id_utente = $data["creating_user_id"];
 
     // Query per ottenere i dati delle palette salvate e a cui ha messo like l'utente
-    $sql = "SELECT p.id_palette, p.color1, p.color2, p.color3, p.color4, p.likes, p.creating_user_id 
+    $sql = "SELECT p.id_palette, p.color1, p.color2, p.color3, p.color4, p.likes, p.creating_user_id,
+            CASE WHEN sp.id_utente IS NOT NULL THEN true ELSE false END AS isSaved,
+            CASE WHEN l.id_utente IS NOT NULL THEN true ELSE false END AS isLiked
             FROM palettes p 
             LEFT JOIN save_palettes sp ON p.id_palette = sp.id_palette AND sp.id_utente = '$id_utente'
             LEFT JOIN likes l ON p.id_palette = l.id_palette AND l.id_utente = '$id_utente'
@@ -31,6 +33,9 @@ if ($connessione->connect_error) {
 
     // Iterazione sui risultati della query
     while ($row = $result->fetch_assoc()) {
+        // Converti i valori di isSaved e isLiked in booleani
+        $row['isSaved'] = $row['isSaved'] == '1' ? true : false;
+        $row['isLiked'] = $row['isLiked'] == '1' ? true : false;
         $paletteData[] = $row;
     }
 

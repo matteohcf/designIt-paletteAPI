@@ -19,7 +19,7 @@ if ($connessione->connect_error) {
     $passwordHashed = md5($password);
 
     // Esegui la query per controllare se l'utente esiste nel database
-    $sql = "SELECT * FROM utenti WHERE email = '$email' AND password = '$passwordHashed'";
+    $sql = "SELECT * FROM utenti WHERE email = '$email' AND password = '$passwordHashed' AND auth = 'normal'";
     $result = $connessione->query($sql);
 
     // Controlla se la query ha prodotto risultati

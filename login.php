@@ -14,29 +14,45 @@ if ($connessione->connect_error) {
 } else {
     // Ottieni i dati inviati dal frontend
     $data = json_decode(file_get_contents("php://input"), true);
-    $email = $data['email'];
-    $password = $data['password'];
+    $email = isset($data['email']) ? $connessione->real_escape_string($data['email']) : null;
+    $password = isset($data['password']) ? $connessione->real_escape_string($data['password']) : null;
     $passwordHashed = md5($password);
 
-    // Esegui la query per controllare se l'utente esiste nel database
-    $sql = "SELECT * FROM utenti WHERE email = '$email' AND password = '$passwordHashed' AND auth = 'normal'";
-    $result = $connessione->query($sql);
+    if ($email !== null && $password !== null) {
+        // Esegui la query preparata per controllare se l'utente esiste nel database
+        $sql = "SELECT * FROM utenti WHERE email = ? AND password = ? AND auth = 'normal'";
+        $stmt = $connessione->prepare($sql);
 
-    // Controlla se la query ha prodotto risultati
-    if ($result->num_rows > 0) {
-        // Utente trovato, restituisci un messaggio di successo
-        $userData = $result->fetch_assoc();
-        $response = array(
-            "status" => "success",
-            "data" => $userData
-        );
+        if ($stmt) {
+            // Associa i parametri e esegui la query
+            $stmt->bind_param("ss", $email, $passwordHashed);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            // Controlla se la query ha prodotto risultati
+            if ($result->num_rows > 0) {
+                // Utente trovato, restituisci un messaggio di successo
+                $userData = $result->fetch_assoc();
+                $response = array(
+                    "status" => "success",
+                    "data" => $userData
+                );
+            } else {
+                // Utente non trovato, restituisci un messaggio di errore
+                $response = array(
+                    "status" => "error",
+                    "message" => "Credenziali non valide"
+                );
+            }
+
+            // Chiudi lo statement
+            $stmt->close();
+        } else {
+            // Errore nella preparazione della query
+            echo "Errore nella preparazione della query: " . $connessione->error;
+        }
     } else {
-        // Utente non trovato, restituisci un messaggio di errore
-        $response = array(
-            "status" => "error",
-            "message" => "Credenziali non valide",
-            "password" => $passwordHashed
-        );
+        echo "Email o password non fornite.";
     }
 
     // Restituisci la risposta al frontend come JSON

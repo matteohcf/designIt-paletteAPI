@@ -1,5 +1,5 @@
 <?php
-
+/* Only for mobile */
 include_once("config.php");
 
 // Abilita CORS

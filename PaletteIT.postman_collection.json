@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "8a9aeb2d-f1da-46ce-b064-b7054d1e5c30",
+		"name": "PaletteIT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33389982"
+	},
+	"item": [
+		{
+			"name": "getPalette",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{dominio}}getPalette.php",
+					"host": [
+						"{{dominio}}getPalette",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addLike",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id_palette\": \"96\", \"id_utente\": \"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}addLike.php",
+					"host": [
+						"{{dominio}}addLike",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "savePalette",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id_palette\": \"96\", \"id_utente\": \"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}savePalette.php",
+					"host": [
+						"{{dominio}}savePalette",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePalette",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{dominio}}deletePalette.php?paletteId=125&userId=55",
+					"host": [
+						"{{dominio}}deletePalette",
+						"php"
+					],
+					"query": [
+						{
+							"key": "paletteId",
+							"value": "125"
+						},
+						{
+							"key": "userId",
+							"value": "55"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\": \"test@gmail.com\", \"password\": \"test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}login.php",
+					"host": [
+						"{{dominio}}login",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPaletteDashboard",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{dominio}}getPaletteDashboard.php?creating_user_id=10",
+					"host": [
+						"{{dominio}}getPaletteDashboard",
+						"php"
+					],
+					"query": [
+						{
+							"key": "creating_user_id",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPaletteFiltered",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{dominio}}getPaletteFiltered.php?creating_user_id=10",
+					"host": [
+						"{{dominio}}getPaletteFiltered",
+						"php"
+					],
+					"query": [
+						{
+							"key": "creating_user_id",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "creaPalette",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"color1\": \"#008DDA\", \"color2\": \"#008DDA\", \"color3\": \"#008DDA\", \"color4\": \"#008DDA\", \"creating_user_id\": \"10\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}creaPalette.php",
+					"host": [
+						"{{dominio}}creaPalette",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"proff\", \"email\": \"proff@gmail.com\", \"password\": \"proff\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}register.php",
+					"host": [
+						"{{dominio}}register",
+						"php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authGoogle",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"token\": \"IMPOSSIBILE DA GENERARE\", \"google\": \"true\", \"email\": \"prof2@gmail.com\", \"username\": \"prof2\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{dominio}}authGoogle.php",
+					"host": [
+						"{{dominio}}authGoogle",
+						"php"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

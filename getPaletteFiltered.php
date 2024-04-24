@@ -6,13 +6,13 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// CONNESSIONE AL DB
+// Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 if ($connessione->connect_error) {
     echo "Errore di connessione: " . $connessione->connect_error;
 } else {
-    // Ottieni l'id dell'utente dall'URL
+    // Ottieni i dati dall'URL della GET
     $id_utente = isset($_GET["creating_user_id"]) ? $connessione->real_escape_string($_GET["creating_user_id"]) : null;
 
     if ($id_utente !== null) {
@@ -34,25 +34,21 @@ if ($connessione->connect_error) {
             $stmt->execute();
             $result = $stmt->get_result();
 
-            // Array per salvare i dati delle palette salvate e a cui ha messo like l'utente
             $paletteData = array();
 
-            // Iterazione sui risultati della query
             while ($row = $result->fetch_assoc()) {
-                // Converti i valori di isSaved e isLiked in booleani
+                // Converti i valori di isSaved e isLiked in boolean
                 $row['isSaved'] = (bool)$row['isSaved'];
                 $row['isLiked'] = (bool)$row['isLiked'];
                 $paletteData[] = $row;
             }
 
-            // Restituisci i dati delle palette come risposta JSON
+            // Restituisci i dati come JSON
             header('Content-Type: application/json');
             echo json_encode($paletteData);
 
-            // Chiudi lo statement
             $stmt->close();
         } else {
-            // Errore nella preparazione della query
             echo "Errore nella preparazione della query: " . $connessione->error;
         }
     } else {

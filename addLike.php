@@ -19,12 +19,11 @@ header("Access-Control-Allow-Methods: *");
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-// Verifica la connessione
 if ($connessione->connect_error) {
     die("Errore di connessione: " . $connessione->connect_error);
 }
 
-// Ottieni l'id della palette e l'id dell'utente dall'input POST
+// Ottieni i dati dal post
 $data = json_decode(file_get_contents("php://input"), true);
 $id_palette = isset($data["id_palette"]) ? $connessione->real_escape_string($data["id_palette"]) : null;
 $id_utente = isset($data["id_utente"]) ? $connessione->real_escape_string($data["id_utente"]) : null;

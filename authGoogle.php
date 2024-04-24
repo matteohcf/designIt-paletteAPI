@@ -6,13 +6,13 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// CONNESSIONE AL DB
+// Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 if ($connessione->connect_error) {
     echo "Errore di connessione: " . $connessione->connect_error;
 } else {
-    // Recupera i dati inviati dal frontend
+    // Ottieni i dati
     $data = json_decode(file_get_contents("php://input"), true);
     $token = $data['token'];
     $google = $data['google'];
@@ -56,7 +56,7 @@ if ($connessione->connect_error) {
                         "status" => "success",
                         "message" => "Utente GOOGLE registrato con successo"
                     );
-                    /* RIFAI LA SELECT */
+                    /* Rifai la select */
                     $checkGoogleQuery = "SELECT * FROM utenti WHERE email = '$email' AND auth = 'google'";
                     $checkGoogleResult = $connessione->query($checkGoogleQuery);
 
@@ -80,7 +80,7 @@ if ($connessione->connect_error) {
         }
     }
 
-    // Restituisci la risposta al frontend come JSON
+    // Restituisci la risposta come JSON
     header('Content-Type: application/json');
     echo json_encode($response);
 

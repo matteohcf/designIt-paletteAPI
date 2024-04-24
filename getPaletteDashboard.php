@@ -6,7 +6,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// CONNESSIONE AL DB
+// Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 if ($connessione->connect_error) {
@@ -27,17 +27,14 @@ if ($connessione->connect_error) {
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
-                // Array per salvare i dati della palette
                 $paletteData = array();
 
-                // Iterazione sui risultati della query
                 while ($row = $result->fetch_assoc()) {
-                    // Aggiungi i dati della palette all'array
                     $paletteId = $row['id_palette'];
                     $row['isLiked'] = false;
                     $row['isSaved'] = false;
 
-                    // Controlla se l'utente ha messo like a questa palette
+                    // Controlla se l'utente ha messo like alla palette
                     $query_check_like = "SELECT * FROM likes WHERE id_palette = ? AND id_utente = ?";
                     $stmt_check_like = $connessione->prepare($query_check_like);
                     $stmt_check_like->bind_param("ss", $paletteId, $creating_user_id);
@@ -47,7 +44,7 @@ if ($connessione->connect_error) {
                         $row['isLiked'] = true;
                     }
 
-                    // Controlla se l'utente ha salvato questa palette
+                    // Controlla se l'utente ha salvato la palette
                     $query_check_saved = "SELECT * FROM save_palettes WHERE id_palette = ? AND id_utente = ?";
                     $stmt_check_saved = $connessione->prepare($query_check_saved);
                     $stmt_check_saved->bind_param("ss", $paletteId, $creating_user_id);
@@ -60,18 +57,15 @@ if ($connessione->connect_error) {
                     $paletteData[] = $row;
                 }
 
-                // Restituisci i dati della palette come risposta JSON
+                // Restituisci i dati come JSON
                 header('Content-Type: application/json');
                 echo json_encode($paletteData);
             } else {
-                // Nessun risultato trovato
                 echo "Nessun dato della palette trovato.";
             }
 
-            // Chiudi lo statement
             $stmt->close();
         } else {
-            // Errore nella preparazione della query
             echo "Errore nella preparazione della query: " . $connessione->error;
         }
     } else {
@@ -80,20 +74,16 @@ if ($connessione->connect_error) {
         $result = $connessione->query($sql);
 
         if ($result->num_rows > 0) {
-            // Array per salvare i dati della palette
             $paletteData = array();
 
-            // Iterazione sui risultati della query
             while ($row = $result->fetch_assoc()) {
-                // Aggiungi i dati della palette all'array
                 $paletteData[] = $row;
             }
 
-            // Restituisci i dati della palette come risposta JSON
+            // Restituisci i dati come JSON
             header('Content-Type: application/json');
             echo json_encode($paletteData);
         } else {
-            // Nessun risultato trovato
             echo "Nessun dato della palette trovato.";
         }
     }

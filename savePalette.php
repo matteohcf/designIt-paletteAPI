@@ -16,20 +16,18 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 
-// CONNESSIONE AL DATABASE
+// Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
-// Verifica la connessione
 if ($connessione->connect_error) {
     die("Errore di connessione al database: " . $connessione->connect_error);
 }
 
-// Ottieni l'id della palette e l'id dell'utente dall'input POST
+// Ottieni i dati
 $data = json_decode(file_get_contents("php://input"), true);
 $id_palette = isset($data["id_palette"]) ? $connessione->real_escape_string($data["id_palette"]) : null;
 $id_utente = isset($data["id_utente"]) ? $connessione->real_escape_string($data["id_utente"]) : null;
 
-// Verifica che i dati siano stati forniti
 if ($id_palette !== null && $id_utente !== null) {
     // Verifica se l'utente ha già salvato questa palette
     $query_check_save = "SELECT * FROM save_palettes WHERE id_utente = ? AND id_palette = ?";
@@ -77,7 +75,6 @@ if ($id_palette !== null && $id_utente !== null) {
             }
         }
 
-        // Chiudi lo statement
         $stmt->close();
     } else {
         echo "Errore nella preparazione della query di verifica: " . $connessione->error;

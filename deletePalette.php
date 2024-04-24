@@ -13,7 +13,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 
-// CONNESSIONE AL DB
+// Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 if ($connessione->connect_error) {
@@ -46,14 +46,12 @@ if ($connessione->connect_error) {
                 echo json_encode(array("error" => "Errore durante l'eliminazione della palette: " . $connessione->error));
             }
 
-            // Chiudi lo statement
             $stmt_delete->close();
         } else {
             // L'utente non ha il permesso di eliminare la palette
             echo json_encode(array("error" => "L'utente non ha i permessi per eliminare questa palette"));
         }
 
-        // Chiudi lo statement di verifica dei permessi
         $stmt_check_permission->close();
     }
 }

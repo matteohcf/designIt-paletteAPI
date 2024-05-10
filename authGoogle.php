@@ -1,10 +1,8 @@
 <?php
 include_once("config.php");
+include_once("vendor/autoload.php"); // Carica la libreria JWT
 
-// Abilita CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+use \Firebase\JWT\JWT;
 
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -14,12 +12,12 @@ if ($connessione->connect_error) {
 } else {
     // Ottieni i dati
     $data = json_decode(file_get_contents("php://input"), true);
-    $token = $data['token'];
+    /* $token = $data['token']; */
     $google = $data['google'];
     $email = $data['email'];
     $username = $data['username'];
 
-    if (empty($token) || empty($google) || empty($email) || empty($username)) {
+    if (/* empty($token) || */ empty($google) || empty($email) || empty($username)) {
         $response = array(
             "status" => "error",
             "message" => "Dati mancanti"
@@ -32,10 +30,24 @@ if ($connessione->connect_error) {
         if ($checkGoogleResult->num_rows > 0) {
             // L'utente è già registrato con Google
             $userData = $checkGoogleResult->fetch_assoc();
+
+            // Genera il token JWT
+            $secret_key = "FFGGDDKSJ344";
+            $token = array(
+                "id_utente" => $userData['id_utente'],
+                "email" => $userData['email'],
+                "exp" => time() + (60 * 60) // Scadenza del token dopo 1 ora
+            );
+            $jwt = JWT::encode($token, $secret_key, 'HS256');
+
             $response = array(
                 "status" => "success",
                 "message" => "L'utente è già registrato con Google - Login",
-                "data" => $userData
+                "id_utente" => $userData['id_utente'],
+                "email" => $userData['email'],
+                "username" => $userData['username'],
+                "auth" => $userData['auth'],
+                "token" => $jwt
             );
         } else {
             // Verifica se l'utente è già registrato normalmente
@@ -63,10 +75,24 @@ if ($connessione->connect_error) {
                     if ($checkGoogleResult->num_rows > 0) {
                         // L'utente è già registrato con Google
                         $userData = $checkGoogleResult->fetch_assoc();
+
+                        // Genera il token JWT
+                        $secret_key = "FFGGDDKSJ344";
+                        $token = array(
+                            "id_utente" => $userData['id_utente'],
+                            "email" => $userData['email'],
+                            "exp" => time() + (60 * 60) // Scadenza del token dopo 1 ora
+                        );
+                        $jwt = JWT::encode($token, $secret_key, 'HS256');
+
                         $response = array(
                             "status" => "success",
                             "message" => "Utente registrato + Login Success",
-                            "data" => $userData
+                            "id_utente" => $userData['id_utente'],
+                            "email" => $userData['email'],
+                            "username" => $userData['username'],
+                            "auth" => $userData['auth'],
+                            "token" => $jwt
                         );
                     }
                 } else {

@@ -1,17 +1,6 @@
 <?php
 include_once("config.php");
-
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: *");
-    header("Access-Control-Allow-Methods: *");
-    http_response_code(200);
-    exit;
-}
-
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
+include_once("verifyTokenJWT.php");
 
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -19,6 +8,28 @@ $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 if ($connessione->connect_error) {
     echo "Errore di connessione: " . $connessione->connect_error;
 } else {
+    /* Verifica token */
+    $headers = getallheaders();
+    $token = "null";
+    foreach ($headers as $name => $value) {
+        if ($name === 'Authorization') {
+            // Dividi il valore dell'header per ottenere solo il token
+            $token = trim(str_replace('Bearer', '', $value));
+            break;
+        }
+    }
+    /* echo $token; */
+
+    // Verify the token using the function
+    $decodedToken = verifyToken($token);
+
+    // Handle invalid token
+    if ($decodedToken === false) {
+    http_response_code(401);
+    echo json_encode(array("message" => "Invalid Token"));
+    exit;
+    }
+
     $paletteId = isset($_GET['paletteId']) ? $_GET['paletteId'] : null;
     $userId = isset($_GET['userId']) ? $_GET['userId'] : null;
 

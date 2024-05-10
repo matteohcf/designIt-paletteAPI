@@ -1,11 +1,6 @@
 <?php
 include_once("config.php");
 
-// Abilita CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type");
-
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 

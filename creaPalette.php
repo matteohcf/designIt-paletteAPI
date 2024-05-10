@@ -1,10 +1,6 @@
 <?php
 include_once("config.php");
-
-// Abilita CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+include_once("verifyTokenJWT.php");
 
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -15,6 +11,27 @@ if ($connessione->connect_error) {
         "message" => "Errore di connessione al database"
     );
 } else {
+    /* Verifica del token */
+    $headers = getallheaders();
+    $token = "null";
+    foreach ($headers as $name => $value) {
+        if ($name === 'Authorization') {
+            // Dividi il valore dell'header per ottenere solo il token
+            $token = trim(str_replace('Bearer', '', $value));
+            break;
+        }
+    }
+    /* echo $token; */
+
+    // Verify the token using the function
+    $decodedToken = verifyToken($token);
+
+    // Handle invalid token
+    if ($decodedToken === false) {
+    http_response_code(401);
+    echo json_encode(array("message" => "Invalid Token"));
+    exit;
+    }
     // Ottieni i dati
     $data = json_decode(file_get_contents("php://input"), true);
     $color1 = isset($data['color1']) ? $data['color1'] : null;

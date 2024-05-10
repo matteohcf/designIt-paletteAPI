@@ -1,10 +1,8 @@
 <?php
 include_once("config.php");
+include_once("vendor/autoload.php"); // Carica la libreria JWT
 
-// Abilita CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+use \Firebase\JWT\JWT;
 
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -31,9 +29,28 @@ if ($connessione->connect_error) {
             if ($result->num_rows > 0) {
                 // Utente trovato
                 $userData = $result->fetch_assoc();
+
+                // Chiudi il risultato e la dichiarazione preparata
+                $result->close();
+                $stmt->close();
+
+                // Genera il token JWT
+                $secret_key = "FFGGDDKSJ344";
+                $token = array(
+                    "id_utente" => $userData['id_utente'],
+                    "email" => $userData['email'],
+                    "exp" => time() + (60 * 60) // Scadenza del token dopo 1 ora
+                );
+                $jwt = JWT::encode($token, $secret_key, 'HS256');
+
                 $response = array(
                     "status" => "success",
-                    "data" => $userData
+                    "message" => "Login effettuato con successo",
+                    "id_utente" => $userData['id_utente'],
+                    "email" => $userData['email'],
+                    "username" => $userData['username'],
+                    "auth" => $userData['auth'],
+                    "token" => $jwt
                 );
             } else {
                 // Dato non trovato
@@ -42,8 +59,6 @@ if ($connessione->connect_error) {
                     "message" => "Credenziali non valide"
                 );
             }
-
-            $stmt->close();
         } else {
             echo "Errore nella preparazione della query: " . $connessione->error;
         }
@@ -58,3 +73,4 @@ if ($connessione->connect_error) {
     // Chiudi la connessione al database
     $connessione->close();
 }
+?>

@@ -1,26 +1,35 @@
 <?php
 
-// Abilita CORS se è una richiesta OPTIONS
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Headers: *");
-    header("Access-Control-Allow-Methods: *");
-    http_response_code(200);
-    exit;
-}
-
 include_once("config.php");
-
-// Abilita CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: *");
+include_once("verifyTokenJWT.php"); // Includi il file con la funzione verifyToken
 
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
 if ($connessione->connect_error) {
     die("Errore di connessione: " . $connessione->connect_error);
+}
+
+/* Verifica token */
+$headers = getallheaders();
+$token = "null";
+foreach ($headers as $name => $value) {
+    if ($name === 'Authorization') {
+        // Dividi il valore dell'header per ottenere solo il token
+        $token = trim(str_replace('Bearer', '', $value));
+        break;
+    }
+}
+/* echo $token; */
+
+// Verify the token using the function
+$decodedToken = verifyToken($token);
+
+// Handle invalid token
+if ($decodedToken === false) {
+  http_response_code(401);
+  echo json_encode(array("message" => "Invalid Token"));
+  exit;
 }
 
 // Ottieni i dati dal post
@@ -93,3 +102,5 @@ if ($id_palette && $id_utente) {
 
 // Chiudi la connessione
 $connessione->close();
+
+?>

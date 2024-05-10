@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Creato il: Apr 24, 2024 alle 10:32
+-- Creato il: Mag 10, 2024 alle 14:16
 -- Versione del server: 8.0.36-0ubuntu0.22.04.1
--- Versione PHP: 8.1.2-1ubuntu2.14
+-- Versione PHP: 8.1.2-1ubuntu2.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -151,8 +151,6 @@ INSERT INTO `likes` (`id_like`, `id_utente`, `id_palette`) VALUES
 (330, 10, 65),
 (335, 10, 31),
 (338, 10, 97),
-(339, 10, 96),
-(342, 42, 68),
 (343, 10, 99),
 (344, 42, 91),
 (345, 42, 99),
@@ -161,15 +159,85 @@ INSERT INTO `likes` (`id_like`, `id_utente`, `id_palette`) VALUES
 (348, 42, 100),
 (349, 49, 65),
 (369, 10, 67),
-(374, 42, 93),
 (375, 42, 71),
 (376, 10, 3),
 (377, 55, 67),
 (378, 55, 62),
-(380, 42, 90),
 (382, 56, 133),
-(383, 10, 68),
-(384, 42, 67);
+(386, 42, 93),
+(388, 42, 134),
+(389, 42, 67),
+(390, 42, 90),
+(392, 10, 68),
+(393, 42, 68),
+(400, 1, 139),
+(402, 2, 139),
+(403, 3, 139),
+(406, 6, 139),
+(407, 7, 139),
+(408, 5, 139),
+(409, 8, 139),
+(410, 9, 139),
+(411, 10, 139),
+(412, 11, 139),
+(413, 12, 139),
+(414, 13, 139),
+(415, 14, 139),
+(416, 15, 139),
+(417, 16, 139),
+(418, 17, 139),
+(419, 18, 139),
+(420, 19, 139),
+(421, 20, 139),
+(422, 21, 139),
+(423, 22, 139),
+(424, 23, 139),
+(425, 24, 139),
+(426, 25, 139),
+(427, 26, 139),
+(428, 27, 139),
+(429, 29, 139),
+(430, 28, 139),
+(431, 30, 139),
+(432, 31, 139),
+(433, 32, 139),
+(434, 33, 139),
+(435, 35, 139),
+(436, 34, 139),
+(437, 37, 139),
+(438, 38, 139),
+(439, 36, 139),
+(440, 39, 139),
+(441, 40, 139),
+(442, 41, 139),
+(443, 43, 139),
+(444, 44, 139),
+(445, 42, 139),
+(446, 45, 139),
+(447, 46, 139),
+(448, 47, 139),
+(449, 48, 139),
+(450, 50, 139),
+(451, 51, 139),
+(452, 49, 139),
+(453, 52, 139),
+(454, 53, 139),
+(455, 54, 139),
+(456, 55, 139),
+(457, 56, 139),
+(458, 57, 139),
+(459, 58, 139),
+(460, 59, 139),
+(461, 60, 139),
+(462, 61, 139),
+(463, 63, 139),
+(464, 62, 139),
+(465, 64, 139),
+(466, 66, 139),
+(467, 65, 139),
+(468, 67, 139),
+(469, 68, 139),
+(470, 69, 139);
 
 -- --------------------------------------------------------
 
@@ -211,7 +279,6 @@ INSERT INTO `palettes` (`id_palette`, `color1`, `color2`, `color3`, `color4`, `l
 (71, '#86469c', '#bc7fdc', '#fb9ad1', '#ffcdea', 12, 10),
 (72, '#9e1dc9', '#af50e2', '#ec55ab', '#f495cc', 5, 10),
 (84, '#738791', '#879da1', '#808e8e', '#d7d5d0', 0, 41),
-(86, '#008DDA', '#41C9E2', '#ACE2E1', '#F7EEDD', 0, 10),
 (89, '#d9edbf', '#ff9800', '#2c7865', '#90d26d', 9, 10),
 (90, '#c5ee91', '#ecbe79', '#59b19b', '#b4e59a', 2, 10),
 (91, '#c5ee91', '#93e1aa', '#59b19b', '#718e81', 2, 10),
@@ -219,12 +286,13 @@ INSERT INTO `palettes` (`id_palette`, `color1`, `color2`, `color3`, `color4`, `l
 (93, '#1f2544', '#474f7a', '#81689d', '#ffd0ec', 14, 10),
 (94, '#1635d0', '#091977', '#7c6a90', '#e0b8d0', 6, 10),
 (95, '#df826c', '#f8ffd2', '#d0f288', '#8adab2', 10, 10),
-(96, '#e1806b', '#b5bf73', '#c8d7a8', '#c6f0db', 1, 10),
+(96, '#e1806b', '#b5bf73', '#c8d7a8', '#c6f0db', 0, 10),
 (97, '#edfd00', '#f59900', '#d38301', '#a96800', 1, 10),
 (99, '#263e0f', '#4e7a27', '#76bb40', '#cde8b5', 2, 10),
 (100, '#5c0701', '#b51a00', '#ff6250', '#ff8c82', 1, 42),
 (125, '#008DDA', '#41C9E2', '#ACE2E1', '#F7EEDD', 0, 55),
-(126, '#008DDA', '#41C9E2', '#ACE2E1', '#F7EEDD', 0, 55);
+(126, '#008DDA', '#41C9E2', '#ACE2E1', '#F7EEDD', 0, 55),
+(134, '#450d59', '#7a219e', '#be38f3', '#e292fe', 1, 42);
 
 -- --------------------------------------------------------
 
@@ -236,7 +304,7 @@ CREATE TABLE `save_palettes` (
   `id_save` int NOT NULL,
   `id_utente` int NOT NULL DEFAULT '0',
   `id_palette` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dump dei dati per la tabella `save_palettes`
@@ -261,7 +329,9 @@ INSERT INTO `save_palettes` (`id_save`, `id_utente`, `id_palette`) VALUES
 (77, 55, 62),
 (78, 25, 67),
 (80, 56, 65),
-(81, 10, 68);
+(83, 10, 3),
+(84, 10, 96),
+(85, 57, 93);
 
 -- --------------------------------------------------------
 
@@ -323,7 +393,11 @@ INSERT INTO `utenti` (`id_utente`, `email`, `username`, `password`, `auth`) VALU
 (53, 'giorgio.pagani2003@gmail.com', 'Giorgio Pagani', NULL, 'google'),
 (54, 'prof1@gmail.com', 'prof1', '4f5fdb3de5aa701eae2961743a00c01c', 'normal'),
 (55, 'danielecr09@gmail.com', 'Crespi', NULL, 'google'),
-(56, 'riccardosilva2002@gmail.com', 'riccardosilva', '38f83da38d48857867acdeb5a489db05', 'normal');
+(56, 'riccardosilva2002@gmail.com', 'riccardosilva', '38f83da38d48857867acdeb5a489db05', 'normal'),
+(57, 'madaschialessandro81@gmail.com', 'Alessandro Madaschi', NULL, 'google'),
+(58, 'army@gmail.com', 'army', 'e7b95b49658278100801c88833a52522', 'normal'),
+(59, 'Test@test.test', 'Test3', '496fe150c2aa60c4134b51bf2a021c59', 'normal'),
+(60, 'aaa@aaa.aaa', 'aaa', '47bce5c74f589f4867dbd57e9ca9f808', 'normal');
 
 --
 -- Indici per le tabelle scaricate
@@ -361,25 +435,25 @@ ALTER TABLE `utenti`
 -- AUTO_INCREMENT per la tabella `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id_like` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=385;
+  MODIFY `id_like` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=471;
 
 --
 -- AUTO_INCREMENT per la tabella `palettes`
 --
 ALTER TABLE `palettes`
-  MODIFY `id_palette` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id_palette` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
 
 --
 -- AUTO_INCREMENT per la tabella `save_palettes`
 --
 ALTER TABLE `save_palettes`
-  MODIFY `id_save` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id_save` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT per la tabella `utenti`
 --
 ALTER TABLE `utenti`
-  MODIFY `id_utente` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id_utente` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

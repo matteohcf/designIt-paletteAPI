@@ -18,9 +18,8 @@ error_reporting(E_ALL); */
  * @return mixed The decoded payload if the token is valid, false otherwise
  */
 
-function verifyToken($token) {
+/* function verifyToken($token) {
     $key = "FFGGDDKSJ344";
-    /* echo $token; */
     try {
         // Decode the JWT token using the secret key and specified algorithm
         $decodedToken = JWT::decode($token, new Key($key, 'HS256'));
@@ -32,5 +31,14 @@ function verifyToken($token) {
         // Handle any exceptions that occur during decoding (invalid token, etc.)
         // Return false to indicate an invalid token
         return false;
-    }
+    } */
+
+    function verifyToken($token) {
+        $key = "FFGGDDKSJ344"; // Chiave segreta utilizzata per firmare il token
+        try {
+            $decodedToken = JWT::decode($token, new Key($key, 'HS256'));
+            return (array) $decodedToken; // Converti in array e restituisci
+        } catch (Exception $e) {
+            return false; // Token non valido
+        }
 }

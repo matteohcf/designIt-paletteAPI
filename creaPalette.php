@@ -2,6 +2,23 @@
 include_once("config.php");
 include_once("verifyTokenJWT.php");
 
+// Funzione per ottenere l'header Authorization
+function getAuthorizationHeader() {
+    $headers = null;
+    if (isset($_SERVER['Authorization'])) {
+        $headers = trim($_SERVER["Authorization"]);
+    } else if (isset($_SERVER['HTTP_AUTHORIZATION'])) { // Nginx or fast CGI
+        $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+    } elseif (function_exists('apache_request_headers')) {
+        $requestHeaders = apache_request_headers();
+        $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
+        if (isset($requestHeaders['Authorization'])) {
+            $headers = trim($requestHeaders['Authorization']);
+        }
+    }
+    return $headers;
+}
+
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
@@ -11,40 +28,47 @@ if ($connessione->connect_error) {
         "message" => "Errore di connessione al database"
     );
 } else {
-    /* Verifica del token */
-    $headers = getallheaders();
-    $token = "null";
-    foreach ($headers as $name => $value) {
-        if ($name === 'Authorization') {
-            // Dividi il valore dell'header per ottenere solo il token
-            $token = trim(str_replace('Bearer', '', $value));
-            break;
-        }
+    // Verifica del token
+    $token = getAuthorizationHeader();
+    if ($token) {
+        $token = trim(str_replace('Bearer', '', $token));
+    } else {
+        http_response_code(401);
+        echo json_encode(array("message" => "Missing Authorization Header"));
+        exit;
     }
-    /* echo $token; */
 
     // Verify the token using the function
     $decodedToken = verifyToken($token);
 
     // Handle invalid token
     if ($decodedToken === false) {
-    http_response_code(401);
-    echo json_encode(array("message" => "Invalid Token"));
-    exit;
+        http_response_code(401);
+        echo json_encode(array("message" => "Invalid Token"));
+        exit;
     }
-    // Ottieni i dati
+
+    // Ottieni l'ID utente dal token decodificato
+    $creating_user_id = $decodedToken['id_utente'] ?? null;
+
+    if ($creating_user_id === null) {
+        http_response_code(401);
+        echo json_encode(array("message" => "Invalid Token"));
+        exit;
+    }
+
+    // Ottieni i dati dal post
     $data = json_decode(file_get_contents("php://input"), true);
     $color1 = isset($data['color1']) ? $data['color1'] : null;
     $color2 = isset($data['color2']) ? $data['color2'] : null;
     $color3 = isset($data['color3']) ? $data['color3'] : null;
     $color4 = isset($data['color4']) ? $data['color4'] : null;
-    $creating_user_id = isset($data['creating_user_id']) ? $data['creating_user_id'] : null;
 
     // Verifica dei dati
-    if (empty($color1) || empty($color2) || empty($color3) || empty($color4) || empty($creating_user_id)) {
+    if (empty($color1) || empty($color2) || empty($color3) || empty($color4)) {
         $response = array(
             "status" => "error",
-            "message" => "I colori e l'ID utente sono obbligatori"
+            "message" => "Tutti i colori sono obbligatori"
         );
     } else {
         // Prepara query
@@ -76,3 +100,4 @@ echo json_encode($response);
 
 // Chiudi la connessione al database
 $connessione->close();
+?>

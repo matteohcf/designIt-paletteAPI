@@ -25,10 +25,15 @@
 			"name": "addLike",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"id_palette\": \"96\", \"id_utente\": \"10\"}",
+					"raw": "{\"id_palette\": \"68\", \"id_utente\": \"10\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -49,7 +54,12 @@
 			"name": "savePalette",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\"id_palette\": \"96\", \"id_utente\": \"10\"}",
@@ -73,9 +83,14 @@
 			"name": "deletePalette",
 			"request": {
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"url": {
-					"raw": "{{dominio}}deletePalette.php?paletteId=125&userId=55",
+					"raw": "{{dominio}}deletePalette.php?paletteId=142",
 					"host": [
 						"{{dominio}}deletePalette",
 						"php"
@@ -83,11 +98,7 @@
 					"query": [
 						{
 							"key": "paletteId",
-							"value": "125"
-						},
-						{
-							"key": "userId",
-							"value": "55"
+							"value": "142"
 						}
 					]
 				}
@@ -101,7 +112,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"email\": \"test@gmail.com\", \"password\": \"test\"}",
+					"raw": "{\"email\": \"teo@gmail.com\", \"password\": \"teo\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -122,18 +133,17 @@
 			"name": "getPaletteDashboard",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"url": {
-					"raw": "{{dominio}}getPaletteDashboard.php?creating_user_id=10",
+					"raw": "{{dominio}}getPaletteDashboard.php",
 					"host": [
 						"{{dominio}}getPaletteDashboard",
 						"php"
-					],
-					"query": [
-						{
-							"key": "creating_user_id",
-							"value": "10"
-						}
 					]
 				}
 			},
@@ -143,18 +153,17 @@
 			"name": "getPaletteFiltered",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"url": {
-					"raw": "{{dominio}}getPaletteFiltered.php?creating_user_id=10",
+					"raw": "{{dominio}}getPaletteFiltered.php",
 					"host": [
 						"{{dominio}}getPaletteFiltered",
 						"php"
-					],
-					"query": [
-						{
-							"key": "creating_user_id",
-							"value": "10"
-						}
 					]
 				}
 			},
@@ -164,7 +173,12 @@
 			"name": "creaPalette",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{session jwt}}"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\"color1\": \"#008DDA\", \"color2\": \"#008DDA\", \"color3\": \"#008DDA\", \"color4\": \"#008DDA\", \"creating_user_id\": \"10\"}",
@@ -191,7 +205,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"username\": \"proff\", \"email\": \"proff@gmail.com\", \"password\": \"proff\"}",
+					"raw": "{\"username\": \"teog\", \"email\": \"teog@gmail.com\", \"password\": \"teog\"}",
 					"options": {
 						"raw": {
 							"language": "json"

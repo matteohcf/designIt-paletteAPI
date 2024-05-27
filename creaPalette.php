@@ -19,6 +19,11 @@ function getAuthorizationHeader() {
     return $headers;
 }
 
+// Funzione per validare un colore HEX
+function isValidHexColor($color) {
+    return preg_match('/^#[0-9A-Fa-f]{6}$/', $color);
+}
+
 // Connessione al database
 $connessione = new mysqli($db_host, $db_user, $db_password, $db_name);
 
@@ -69,6 +74,11 @@ if ($connessione->connect_error) {
         $response = array(
             "status" => "error",
             "message" => "Tutti i colori sono obbligatori"
+        );
+    } elseif (!isValidHexColor($color1) || !isValidHexColor($color2) || !isValidHexColor($color3) || !isValidHexColor($color4)) {
+        $response = array(
+            "status" => "error",
+            "message" => "Tutti i colori devono essere in formato HEX (#RRGGBB)"
         );
     } else {
         // Prepara query
